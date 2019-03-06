@@ -30,9 +30,9 @@ def parse_arguments():
                         nargs='?',
                         help='Path for Git webhook', default='/git/<reponame>/webhook')
 
-    parser.add_argument('-p', '--port',
+    parser.add_argument('-p', '--webhook-port',
                         type=int, nargs='?',
-                        help='Port for Git webhook', default=6969)
+                        help='Port for Git webhook', default=1337)
 
     return parser.parse_args()
 

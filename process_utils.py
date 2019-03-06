@@ -4,8 +4,7 @@ from subprocess import run, Popen, PIPE, STDOUT
 
 
 def execute(command):
-    args = command.split()
-    output = run(args,
+    output = run(command,
                  stdout=PIPE,
                  stderr=PIPE,
                  cwd=os.getcwd(),

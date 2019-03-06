@@ -12,6 +12,7 @@ class Deployer(object):
         self.local_branch = args.local_branch
         self.script = args.script
         self.webhook_path = args.webhook_path
+        self.webhook_port = args.webhook_port
 
         self.deploy_in_progress = False
         self.git_repo_name = git_utils.get_git_repo_name(self.remote_branch)
@@ -23,7 +24,7 @@ class Deployer(object):
         if '<reponame>' in path:
             path = path.replace('<reponame>', self.git_repo_name)
 
-        webhook = Webhook(self.deploy, path=path, port=5234)
+        webhook = Webhook(self.deploy, path=path, port=self.webhook_port)
         webhook.listen()
 
         return webhook

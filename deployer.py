@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from webhook import Webhook
 import git_utils
 import process_utils

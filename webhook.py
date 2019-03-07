@@ -36,7 +36,7 @@ def make_webhook_handler(webhook_callback, webhook_path):
         def __init__(self, *args, **kwargs):
             super(RequestHandler, self).__init__(*args, **kwargs)
 
-        def do_GET(self):
+        def do_POST(self):
             if self.path == webhook_path:
                 t = threading.Thread(target=webhook_callback)
                 t.start()

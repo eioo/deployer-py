@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import argparse
-import sys
+
+from colorama import init
+
 from deployer import Deployer
 
 
@@ -32,17 +34,12 @@ def parse_arguments():
 
     parser.add_argument('-p', '--webhook-port',
                         type=int, nargs='?',
-                        help='Port for Git webhook', default=1337)
+                        help='Port for Git webhook', default=9050)
 
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_arguments()
-
-    try:
-        d = Deployer(args)
-    except KeyboardInterrupt:
-        print('^C Exiting...')
-        d.webhook.stop()
-        sys.exit()
+    init()  # colorama
+    deployer = Deployer(args)

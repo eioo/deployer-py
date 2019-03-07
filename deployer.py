@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-from webhook import Webhook
+import time
+
 import git_utils
 import process_utils
-import time
+from logger import log
+from webhook import Webhook
 
 
 class Deployer(object):
@@ -17,6 +19,8 @@ class Deployer(object):
         self.deploy_in_progress = False
         self.git_repo_name = git_utils.get_git_repo_name(self.remote_branch)
         self.webhook = self.create_webhook()
+
+        self.deploy()
 
     def create_webhook(self):
         path = self.webhook_path
@@ -34,26 +38,27 @@ class Deployer(object):
             while True:
                 time.sleep(0.1)
 
-        print('Deploy started')
+        log('Deploy started')
 
         self.close_existing()
         self.fetch()
         self.install()
         self.start()
 
-        print(f'Deploy done. Type \'pm2 logs {self.git_repo_name}\' to view logs.')
+        log(f'Deploy done. Type \'pm2 logs {self.git_repo_name}\' to view logs.')
 
     def close_existing(self):
         process_utils.execute(f'pm2 delete {self.git_repo_name}')
 
     def fetch(self):
-        print('Fetching from git')
+        log('Fetching from git')
         git_utils.fetch_and_reset(self.remote_branch, self.local_branch)
 
     def install(self):
-        print(f'Installing with "{self.npm_client}"')
+        log(f'Installing with "{self.npm_client}"')
         process_utils.execute_and_print(f'{self.npm_client} install')
 
     def start(self):
-        print(f'Running script "{self.script}" with "{self.npm_client}"')
-        process_utils.execute(f'pm2 start {self.npm_client} --name {self.git_repo_name} -- start --color')
+        log(f'Running script "{self.script}" with "{self.npm_client}"')
+        process_utils.execute(
+            f'pm2 start {self.npm_client} --name {self.git_repo_name} -- start --color')
